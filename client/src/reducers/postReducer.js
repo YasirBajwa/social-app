@@ -1,7 +1,7 @@
 
 export default (state = [], action) => {
     switch (action.type) {
-        case 'GET_POST':
+        case 'GET_POSTS':
         return action.payload;
 
         case 'CREATE_POST':

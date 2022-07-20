@@ -1,8 +1,11 @@
-import React from 'react';
+import React ,{useEffect}from 'react';
+import { useDispatch } from 'react-redux';
 import {Container,AppBar,Typography,Grid,Grow} from '@material-ui/core';
 import memories from './images/memories.png';
 import Posts from './components/Posts/Posts';
 import Form from './components/Forms/Form';
+
+import {getPosts} from './actions/action'
 
 import useStyles from './styles';
 
@@ -10,6 +13,12 @@ import useStyles from './styles';
 function App() {
 
   const classes = useStyles();
+
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    dispatch(getPosts())
+  },[dispatch])
 
 
   return (
@@ -21,7 +30,7 @@ function App() {
       </AppBar>
       <Grow in>
         <Container>
-          <Grid container justify="space-between" alignItems="stretch" spacing={3}>
+          <Grid container justifyContent="space-between" alignItems="stretch" spacing={3}>
             <Grid item xs={12} sm={7}>
               <Posts/>
             

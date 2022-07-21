@@ -2,20 +2,22 @@ import React,{useState} from 'react'
 import useStyles from './styles';
 import { TextField,Paper,Button ,Typography} from '@material-ui/core';
 import FileBase from 'react-file-base64';
+import {useDispatch} from 'react-redux';
+import { createPost } from '../../actions/action';
 
 const Form = () => {
-  const [postData,setPostData] = useState({
-    creator:'',title:'',message:'',tags:'',selectedFile:''
-  })
+  const [postData,setPostData] = useState({ creator:'',title:'',message:'',tags:'',selectedFile:''});
   const classes = useStyles();
-
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
-          e.preventDefault()  
+          e.preventDefault()  ;
+          dispatch(createPost(postData))
   }
   const clear = () => {
 
   }
+
   return (
     <Paper className={classes.paper}>
       <form autoComplete='false' noValidate  className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>

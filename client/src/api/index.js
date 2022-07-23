@@ -6,4 +6,6 @@ const url = 'http://localhost:5000/posts' ;
 
 export const fetchPosts = async () => await axios.get(url)
   
-export const createPost = async (newPostData) => await axios.post(url,newPostData)
+export const createPost = async (newPostData) => await axios.post(url,newPostData);
+
+export const updatePost = async (id,updatedPost) => await axios.patch(`${url}/${id}`,updatedPost);

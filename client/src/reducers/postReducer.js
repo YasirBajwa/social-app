@@ -7,6 +7,8 @@ export default (state = [], action) => {
         case 'CREATE_POST':
          return [...state,action.payload]   
 
+        case 'UPDATE_POST':
+        return state.map((post) => post._id === action.payload._id ? action.payload : post)
 
         default:
         return state;

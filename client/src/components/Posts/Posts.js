@@ -8,11 +8,11 @@ import Post from "./Post/Post";
 import useStyles from './styles';
 
 
-const Posts = () => {
+const Posts = ({setCurrentId}) => {
   const posts = useSelector((state) => state.postReducer);
   const classes = useStyles();
 
-  console.log(posts)
+  // console.log(posts)
   return (
     <>
      {!posts.length ? <CircularProgress className={classes.progress} /> :(
@@ -20,7 +20,7 @@ const Posts = () => {
         {
           posts.map((post,index) =>(
             <Grid item xs={12} sm={6} md={4} key={post._id}>
-              <Post post={post} index={index}/>
+              <Post post={post} index={index} setCurrentId={setCurrentId}/>
             
             </Grid>
           ))

@@ -24,13 +24,12 @@ const Form = ({currentId,setCurrentId}) => {
           e.preventDefault()  ;
           if(currentId){
             dispatch(updatePost(currentId,postData))
+            clearForm()
           }
            else{
-             if(postData.length > 0){
               dispatch(createPost(postData));
-             }   
+              clearForm()
            }
-           clearForm()
   }
 
   const clearForm = () => {

@@ -7,7 +7,7 @@ export const getPosts = async (req, res) => {
     try {
         
          const postMessages  = await PostMessage.find();
-        
+            console.log("User has been created")   
             res.status(200).json(postMessages);
 
 

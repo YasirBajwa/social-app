@@ -15,7 +15,7 @@ const Navbar = () => {
     <div>
       <AppBar className={classes.appBar} position="static" color="inherit">
         <div className={classes.brandContainer}>
-          <Typography variant="h2"   className={classes.heading} align="center">
+          <Typography component={Link} to="/" variant="h2"   className={classes.heading} align="center">
             Memories
           </Typography>
           <img

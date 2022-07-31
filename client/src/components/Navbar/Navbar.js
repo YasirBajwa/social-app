@@ -20,7 +20,7 @@ const Navbar = () => {
     setUser(null)
   }
   useEffect(() => {
-    const token = user?.token;
+    // const token = user?.token;
     setUser(JSON.parse(localStorage.getItem('user')))
   },[location])
 

@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Avatar,
@@ -6,35 +6,56 @@ import {
   Paper,
   Grid,
   Typography,
-  TextField,
-  ButtonGroup,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { GoogleLogin } from "react-google-login";
-import {useDispatch} from 'react-redux';
-
-import {useHistory} from 'react-router-dom'
-
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import Input from "./Input";
-import Icon from './Icon'
-
-
-import { gapi } from 'gapi-script';
+import Icon from "./Icon";
+import { gapi } from "gapi-script";
+import {signIn,signUp} from '../../actions/auth';
 
 import useStyles from "./styles";
+
+
+
+
+const initialState = {
+  email: "",
+  password: "",
+  confirmPassword: "",
+  firstName: "",
+  lastName: "",
+};
 
 const Auth = () => {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
+  const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
-  const history = useHistory()
+  const history = useHistory();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    if(isSignUp){
+      dispatch(signUp(formData,history))
+
+    }
+    else{
+      dispatch(signIn(formData,history))
+    }
+  };
 
 
 
-  const handleSubmit = () => {};
-
-  const handleChange = () => {};
   const handleShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
@@ -43,33 +64,33 @@ const Auth = () => {
     handleShowPassword(false);
   };
 
-  useEffect(() => {
-    function start() {
-    gapi.client.init({
-    clientId:"505131631208-cnle3vl1pg1qc328jhib6h2rv3l3ts1b.apps.googleusercontent.com",
-    scope: 'email',
-      });
-       }
-      gapi.load('client:auth2', start);
-       }, [])
-
   const googleSuccess = async (res) => {
-    const result = res?.profileObj
-    const token=res?.tokenId;
+    const result = res?.profileObj;
+    const token = res?.tokenId;
 
     try {
-      dispatch({type:'AUTH',payload:{token,result}})
-      history.push('/')
-      
+      dispatch({ type: "AUTH", payload: { token, result } });
+      history.push("/");
     } catch (error) {
-      console.log(error)
-      
+      console.log(error);
     }
+  };
+  const googleFailure = (error) => {
+    console.log("Could not log in with Google", error);
+  };
 
-  }
-  const googleFailure =(error) => {
-    console.log('Could not log in with Google', error)
-  }
+
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        clientId:
+          "505131631208-cnle3vl1pg1qc328jhib6h2rv3l3ts1b.apps.googleusercontent.com",
+        scope: "email",
+      });
+    }
+    gapi.load("client:auth2", start);
+  }, []);
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -140,14 +161,16 @@ const Auth = () => {
                 disabled={renderProps.disabled}
                 startIcon={<Icon />}
                 variant="contained"
-              > Google Sign In</Button>
+              >
+                {" "}
+                Google Sign In
+              </Button>
             )}
-
             onSuccess={googleSuccess}
             onFailure={googleFailure}
-            cookiePolicy={'single_host_origin'}
+            cookiePolicy={"single_host_origin"}
           />
-          
+
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Button onClick={switchMode}>

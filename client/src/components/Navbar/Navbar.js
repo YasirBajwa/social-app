@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { AppBar, Avatar, Button, Toolbar, Typography } from "@material-ui/core";
 
 import useStyles from "./styles";
@@ -9,7 +9,18 @@ import {Link} from 'react-router-dom'
 const Navbar = () => {
   const classes = useStyles();
   
-  const user = null;
+  const [user,setUser] = useState(JSON.parse(localStorage.getItem('user')));
+  // console.log('user',user)
+
+
+  useEffect(() => {
+    const token = user?.token;
+
+
+    setUser(JSON.parse(localStorage.getItem('user')))
+
+
+  },[])
 
   return (
     <div>
@@ -29,7 +40,7 @@ const Navbar = () => {
             {
                 user ? (
                     <div className={classes.profile}>
-                        <Avatar classes={classes.purple} alt={user.result.name} src={user.result.imageUrl}>{user.result.name.charAt(0)}</Avatar>
+                        <Avatar className={classes.purple} alt={user.result.name} src={user.result.imageUrl}>{user.result.name.charAt(0)}</Avatar>
                         <Typography variant="h6" className={classes.userName}>{user.result.name}</Typography>
                         <Button variant="contained" className={classes.logout} color="secondary" onClick={() =>{}}>Logout</Button>
 

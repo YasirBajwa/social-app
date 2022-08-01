@@ -7,7 +7,7 @@ export const signIn = (formData,history) => async(dispatch) =>{
 
      try {
         
-        history.push('/')
+        history.push('/auth')
         
      } catch (error) {
         console.log(error)

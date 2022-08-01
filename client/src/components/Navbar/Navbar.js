@@ -53,7 +53,7 @@ const Navbar = () => {
                 )
 
                 :(
-                    <Button component={Link} to="/auth" variant="contained" className={classes.login} color="primary" onClick={() =>{}}>Login</Button>
+                    <Button component={Link} to="/auth" variant="contained" className={classes.login} color="primary">Login</Button>
 
                 )
             }

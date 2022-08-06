@@ -37,21 +37,12 @@ const Auth = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-  };
+  
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    if(isSignUp){
-      dispatch(signUp(formData,history))
-
-    }
-    else{
-      dispatch(signIn(formData,history))
-    }
+   
   };
 
 
@@ -79,6 +70,17 @@ const Auth = () => {
     console.log("Could not log in with Google", error);
   };
 
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if(isSignUp){
+      dispatch(signUp(formData,history))
+
+    }
+    else{
+      dispatch(signIn(formData,history))
+    }
+  };
 
   useEffect(() => {
     function start() {

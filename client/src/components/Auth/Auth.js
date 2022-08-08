@@ -14,11 +14,11 @@ import { useHistory } from "react-router-dom";
 import Input from "./Input";
 import Icon from "./Icon";
 import { gapi } from "gapi-script";
-import {signIn,signUp} from '../../actions/auth';
+import {signin,signup} from '../../actions/auth';
+
+import { AUTH } from "../../constants/actionType"; 
 
 import useStyles from "./styles";
-
-
 
 
 const initialState = {
@@ -37,15 +37,11 @@ const Auth = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
    
   };
-
-
 
   const handleShowPassword = () => {
     setShowPassword((prev) => !prev);
@@ -60,7 +56,7 @@ const Auth = () => {
     const token = res?.tokenId;
 
     try {
-      dispatch({ type: "AUTH", payload: { token, result } });
+      dispatch({ type:AUTH, data: { token, result } });
       history.push("/");
     } catch (error) {
       console.log(error);
@@ -70,15 +66,14 @@ const Auth = () => {
     console.log("Could not log in with Google", error);
   };
 
-  
   const handleSubmit = (e) => {
     e.preventDefault();
     if(isSignUp){
-      dispatch(signUp(formData,history))
-
+      console.log('signup button pressed');
+      dispatch(signup(formData,history))
     }
     else{
-      dispatch(signIn(formData,history))
+      dispatch(signin(formData,history))
     }
   };
 

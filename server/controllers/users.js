@@ -5,25 +5,40 @@ import jwt from 'jsonwebtoken';
 import UserModal from "../modals/userModal.js";
 
 
-export const signin =  async(req,res) =>{
-    const {email,password} = req.body;
-
+export const signin = async (req, res) => {
+    const { email, password } = req.body;
+  
     try {
-        const existingUser = await UserModal.findOne({email});
-        if(!existingUser){
-            return res.status(400).json({msg:"User not found"});
-        }
-        const isMatch = await bcrypt.compare(password,existingUser.password);
-        if(!isMatch){
-            return res.status(400).json({msg:"Invalid credentials"});
-        }
-        const token = jwt.sign({email:existingUser.email,id:existingUser._id},"test",{expiresIn:'1h'});
-        res.status(200).json({result:existingUser,token});
-        
-    } catch (error) {
-        res.status(500).json({msg:"Server error"});
+      // Find if user exists
+      const existingUser = await UserModal.findOne({ email });
+  
+      if (!existingUser)
+        return res.status(404).json({ message: "User doesn't exist" });
+  
+      // Check pwd
+      const isPasswordCorrect = await bcrypt.compare(
+        password,
+        existingUser.password
+      );
+  
+      // If password is wrong
+      if (!isPasswordCorrect)
+        return res.status(400).json({ message: "Invalid credentials" });
+  
+      // If password is correct and user exists
+  
+      const token = jwt.sign(
+        { email: existingUser.email, id: existingUser._id },
+        "test",
+        { expiresIn: "1h" }
+      );
+  
+      res.status(200).json({ result: existingUser, token });
+    } catch (err) {
+      res.status(500).json({ message: "Something went wrong" });
     }
-}
+  };
+  
 
 
 export const signup =  async(req,res) =>{

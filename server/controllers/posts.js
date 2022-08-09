@@ -56,29 +56,36 @@ export const deletePost = async (req,res) => {
 }
 
 
-export const likePost = async (req,res) => {
-
+export const likePost = async (req, res) => {
     const { id } = req.params;
-
-    if(!req.userId) return res.json({message: "You are not authorized to like this post"});
-
-
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
-
-       const post = await PostMessage.findById(id);
-
-       const index = post.likes.findIndex((id)  => id === String( req.userId))
-
-       if(index === -1) {
-              post.likes.push(req.userId);
-       }
-       else{
-              post.likes.filter( (id) => id !== String(req.userId));
-       }
-
-
-       const updatedPost = await PostMessage.findByIdAndUpdate(id,post, { new: true });
-
-       res.json(updatedPost);
-
-}
+  
+    // If it's authenticated
+    if (!req.userId) return res.json({ message: "Unauthenticated" });
+  
+    // Check
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).send("No post with that id");
+    }
+  
+    // Find post
+    const post = await PostMessage.findById(id);
+  
+    // If he has liked the post
+    const index = post.likes.findIndex((id) => id === String(req.userId));
+  
+    if (index === -1) {
+      // Like the post
+      post.likes.push(req.userId);
+    } else {
+      // Dislike
+      post.likes = post.likes.filter((id) => id !== String(req.userId));
+    }
+  
+    // Like post
+    const updatedPost = await PostMessage.findByIdAndUpdate(id, post, {
+      new: true,
+    });
+  
+    // send response
+    res.json(updatedPost);
+  };

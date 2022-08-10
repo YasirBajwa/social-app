@@ -5,6 +5,8 @@ import {Link,useHistory,useLocation} from 'react-router-dom'
 
 import useStyles from "./styles";
 import memories from "../../images/memories.png";
+import decode from 'jwt-decode';
+
 
 const Navbar = () => {
   const classes = useStyles();
@@ -20,7 +22,13 @@ const Navbar = () => {
     setUser(null)
   }
   useEffect(() => {
-    // const token = user?.token;
+    const token = user?.token;
+
+    if(token){
+      const decodeToken  = decode(token);
+      if(decodeToken && decodeToken.exp * 1000 < new Date().getTime() ) logOut()
+    }
+
     setUser(JSON.parse(localStorage.getItem('user')))
   },[location])
 

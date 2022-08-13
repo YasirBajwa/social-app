@@ -12,7 +12,7 @@ import {
 import Posts from "../Posts/Posts";
 import Form from "../Forms/Form";
 import { useDispatch } from "react-redux";
-import { getPosts } from "../../actions/action";
+import { getPosts ,getPostBySearch} from "../../actions/action";
 import useStyles from "./styles";
 import Pagination from "../Pagination";
 import { useHistory, useLocation } from "react-router-dom";
@@ -40,9 +40,9 @@ const Home = () => {
   }, [currentId, dispatch]);
 
   const searchPost = () => {
-    if(search.trim()){
-     
-
+    if(search.trim() || tags){
+     dispatch(getPostBySearch({search,tags:tags.join(',')}))
+     history.push(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}`)
     }
     else{
       history.push('/')

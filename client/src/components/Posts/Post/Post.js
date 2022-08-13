@@ -51,7 +51,7 @@ const Post = ({ post ,setCurrentId}) => {
     );
   };
 
-  console.log("post",post)
+  // console.log("post",post)
 
   return (
     <Card className={classes.card}>

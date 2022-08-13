@@ -1,5 +1,5 @@
 
-import {GET_ALL,CREATE,UPDATE,DELETE,LIKE} from '../constants/actionType';
+import {GET_ALL,CREATE,UPDATE,DELETE,LIKE,FETCH_BY_SEARCH} from '../constants/actionType';
 import * as api from "../api/index.js";
 
 export const getPosts = () => async (dispatch) => {
@@ -11,10 +11,12 @@ export const getPosts = () => async (dispatch) => {
   }
 };
 
-export const getPostBySearch = () => async(dispatch) => {
+export const getPostBySearch = (searchQuery) => async(dispatch) => {
   try {
-   const {data} = await api.fetchPostBySearch(searchQuery);
-    console.log(data)   
+   const {data:{data}} = await api.fetchPostBySearch(searchQuery);
+   dispatch({ type:FETCH_BY_SEARCH, payload: data });
+
+    // console.log(data)   
   } catch (error) {
     console.log(error)
     

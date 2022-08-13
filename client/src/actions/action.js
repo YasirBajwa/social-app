@@ -11,6 +11,16 @@ export const getPosts = () => async (dispatch) => {
   }
 };
 
+export const getPostBySearch = () => async(dispatch) => {
+  try {
+   const {data} = await api.fetchPostBySearch(searchQuery);
+    console.log(data)   
+  } catch (error) {
+    console.log(error)
+    
+  }
+}
+
 export const createPost = (post) => async (dispatch) => {
 
   if(post.selectedFile){

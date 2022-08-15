@@ -3,13 +3,18 @@ import {GET_ALL,CREATE,UPDATE,DELETE,LIKE,FETCH_BY_SEARCH} from '../constants/ac
 export default (state = [], action) => {
     switch (action.type) {
         case GET_ALL:
-        return action.payload;
+        return{
+            ...state, 
+           posts: action.payload.data,
+           currentPage:action.payload.currentPage,
+           numberOfPages:action.payload.numberOfPages
+         }
 
         case CREATE:
          return [...state,action.payload]   
 
         case FETCH_BY_SEARCH: 
-        return action.payload
+        return {...state,posts:action.payload}
 
         case UPDATE:
         return state.map((post) => post._id === action.payload._id ? action.payload : post)

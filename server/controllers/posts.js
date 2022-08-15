@@ -4,10 +4,17 @@ import PostMessage from "../modals/postMessage.js";
 
 
 export const getPosts = async (req, res) => {
+  const {page} = req.query;
+
+
     try {
+          const LIMIT = 4;
+          const startIndex = (Number(page) - 1) * LIMIT;
+          const total = await PostMessage.countDocuments({})
         
-         const postMessages  = await PostMessage.find();
-            res.status(200).json(postMessages);
+         const posts  = await PostMessage.find().sort({ _id : - 1}).limit(LIMIT).skip(startIndex)
+
+            res.status(200).json({ data: posts , currentPage: Number(page),numberOfPages: Math.ceil(total/LIMIT)});
 
 
     } catch (error) {
@@ -26,7 +33,7 @@ export const getPosts = async (req, res) => {
 
     const posts = await PostMessage.find({ $or: [ {title} , { tags : {$in : tags.split(',')}}]});
 
-     console.log(posts)
+    //  console.log(posts)
     
    
     res.json({data:posts})

@@ -16,43 +16,34 @@ import ThumbUpAltOutlined from "@material-ui/icons/ThumbUpAltOutlined";
 
 import moment from "moment";
 import {useDispatch} from 'react-redux';
+import {useHistory} from 'react-router-dom'
 import { deletePost ,likePost} from "../../../actions/action";
 
 const Post = ({ post ,setCurrentId}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
+  const history = useHistory()
   const user = JSON.parse(localStorage.getItem("user"));
 
   const Likes = () => {
-    if (post.likes.length > 0) {
-      return post.likes.find(
-        (like) => like === (user?.result?.googleId || user?.result?._id)
-      ) ? (
-        <>
-          <ThumbUpAltIcon fontSize="small" />
-          &nbsp;
-          {post.likes.length > 2
-            ? `You and ${post.likes.length - 1} others`
-            : `${post.likes.length} like${post.likes.length > 1 ? "s" : ""}`}
-        </>
-      ) : (
-        <>
-          <ThumbUpAltOutlined fontSize="small" />
-          &nbsp;{post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}
-        </>
-      );
+    if (post?.likes?.length > 0) {
+      return post.likes.find((like) => like === (user?.result?.googleId || user?.result?._id))
+        ? (
+          <><ThumbUpAltIcon fontSize="small" />&nbsp;{post.likes.length > 2 ? `You and ${post.likes.length - 1} others` : `${post.likes.length} like${post.likes.length > 1 ? 's' : ''}` }</>
+        ) : (
+          <><ThumbUpAltOutlined fontSize="small" />&nbsp;{post.likes.length} {post.likes.length === 1 ? 'Like' : 'Likes'}</>
+        );
     }
 
-    return (
-      <>
-        <ThumbUpAltOutlined fontSize="small" />
-        &nbsp;Like
-      </>
-    );
+    return <><ThumbUpAltOutlined fontSize="small" />&nbsp;Like</>;
   };
 
-  // console.log("post",post)
+
+  const openPost = () => {
+    history.push(`/posts/${post._id}`);
+
+  }
+
 
   return (
     <Card className={classes.card} raised elevation={6}>

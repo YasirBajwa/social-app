@@ -12,14 +12,13 @@ import styles from './styles'
 const Paginate = ({page}) => {
     const classes = styles();
     const dispatch = useDispatch();
-    const {numberOfPages} = useSelector((state) => state.postReducer);
+    const {numberOfPages} = useSelector((state) => state.posts);
 
     useEffect(() => {
       if(page) dispatch(getPosts(page))
     
     }, [page])
     
-console.log('numberOfPages',numberOfPages)
 
   return (
     <div>

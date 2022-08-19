@@ -1,12 +1,15 @@
 
-import {GET_ALL,CREATE,UPDATE,DELETE,LIKE,FETCH_BY_SEARCH} from '../constants/actionType';
+import {GET_ALL,CREATE,UPDATE,DELETE,LIKE,FETCH_BY_SEARCH,START_LOADING,END_LOADING} from '../constants/actionType';
 import * as api from "../api/index.js";
 
 export const getPosts = (page) => async (dispatch) => {
   try {
+    dispatch({type:START_LOADING})
     const { data } = await api.fetchPosts(page);
-    // console.log(data)
     dispatch({ type:GET_ALL, payload: data });
+
+    dispatch({type:END_LOADING})
+
   } catch (error) {
     console.log(error);
   }
@@ -14,29 +17,29 @@ export const getPosts = (page) => async (dispatch) => {
 
 export const getPostBySearch = (searchQuery) => async(dispatch) => {
   try {
+    dispatch({type:START_LOADING})
+
    const {data:{data}} = await api.fetchPostBySearch(searchQuery);
    dispatch({ type:FETCH_BY_SEARCH, payload: data });
+   dispatch({type:END_LOADING})
 
-    // console.log(data)   
   } catch (error) {
     console.log(error)
     
   }
 }
 
-export const createPost = (post) => async (dispatch) => {
-
-  if(post.selectedFile){
+export const createPost = (post,history) => async (dispatch) => {
 
   try {
+    dispatch({ type: START_LOADING });
+
     const { data } = await api.createPost(post);
     dispatch({ type: CREATE, payload: data });
+    // history.push(`/posts/${data._id}`);
+
   } catch (error) {
     console.log(error);
-  }
-  }
-  else{
-    alert('Select File is missing')
   }
 
 };

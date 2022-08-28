@@ -1,19 +1,19 @@
-import React,{useState,useEffect} from 'react'
-import useStyles from './styles';
-import { TextField,Paper,Button ,Typography} from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { TextField, Button, Typography, Paper } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
 import FileBase from 'react-file-base64';
-import {useDispatch,useSelector} from 'react-redux';
-import { createPost ,updatePost} from '../../actions/action';
-import {useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import ChipInput from 'material-ui-chip-input';
 
+import { createPost, updatePost } from '../../actions/posts';
+import useStyles from './styles';
 
 const Form = ({ currentId, setCurrentId }) => {
   const [postData, setPostData] = useState({ title: '', message: '', tags: [], selectedFile: '' });
   const post = useSelector((state) => (currentId ? state.posts.posts.find((message) => message._id === currentId) : null));
   const dispatch = useDispatch();
   const classes = useStyles();
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('profile'));
   const history = useHistory();
 
   const clear = () => {
@@ -81,4 +81,4 @@ const Form = ({ currentId, setCurrentId }) => {
   );
 };
 
-export default Form
+export default Form;

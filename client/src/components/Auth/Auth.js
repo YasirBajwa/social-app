@@ -16,7 +16,7 @@ import Icon from "./Icon";
 import { gapi } from "gapi-script";
 import {signin,signup} from '../../actions/auth';
 
-import { AUTH } from "../../constants/actionType"; 
+import { AUTH } from "../../constants/actionTypes"; 
 
 import useStyles from "./styles";
 

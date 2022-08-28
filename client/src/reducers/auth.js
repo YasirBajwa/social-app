@@ -1,4 +1,4 @@
-import {AUTH,LOGOUT} from '../constants/actionType';
+import {AUTH,LOGOUT} from '../constants/actionTypes';
 
 
 const authReducer = ( state = { authData:null} ,action ) =>{

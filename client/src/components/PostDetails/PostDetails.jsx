@@ -5,7 +5,7 @@ import moment from 'moment';
 import { useParams, useHistory, Link } from 'react-router-dom';
 
 import { getPost, getPostsBySearch } from '../../actions/posts';
-import CommentSection from './Comment';
+import CommentSection from './CommentSection';
 import useStyles from './styles';
 
 const Post = () => {
@@ -36,7 +36,6 @@ const Post = () => {
       </Paper>
     );
   }
-  console.log('posts==>',post)
 
   const recommendedPosts = posts.filter(({ _id }) => _id !== post._id);
 

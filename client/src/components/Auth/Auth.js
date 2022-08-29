@@ -1,54 +1,43 @@
-import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Avatar,
-  Button,
-  Paper,
-  Grid,
-  Typography,
-} from "@material-ui/core";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { GoogleLogin } from "react-google-login";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import Input from "./Input";
-import Icon from "./Icon";
+import React, { useState ,useEffect} from 'react';
+import { useDispatch } from 'react-redux';
+import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import { GoogleLogin } from 'react-google-login';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+
+import Icon from './icon';
+import { signin, signup } from '../../actions/auth';
+import { AUTH } from '../../constants/actionTypes';
+import useStyles from './styles';
+import Input from './Input';
 import { gapi } from "gapi-script";
-import {signin,signup} from '../../actions/auth';
 
-import { AUTH } from "../../constants/actionTypes"; 
+const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
-import useStyles from "./styles";
-
-
-const initialState = {
-  email: "",
-  password: "",
-  confirmPassword: "",
-  firstName: "",
-  lastName: "",
-};
-
-const Auth = () => {
-  const classes = useStyles();
-  const [showPassword, setShowPassword] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [formData, setFormData] = useState(initialState);
+const SignUp = () => {
+  const [form, setForm] = useState(initialState);
+  const [isSignup, setIsSignup] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
+  const classes = useStyles();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const [showPassword, setShowPassword] = useState(false);
+  const handleShowPassword = () => setShowPassword(!showPassword);
 
-   
-  };
-
-  const handleShowPassword = () => {
-    setShowPassword((prev) => !prev);
-  };
   const switchMode = () => {
-    setIsSignUp((prev) => !prev);
-    handleShowPassword(false);
+    setForm(initialState);
+    setIsSignup((prevIsSignup) => !prevIsSignup);
+    setShowPassword(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (isSignup) {
+      dispatch(signup(form, history));
+    } else {
+      dispatch(signin(form, history));
+    }
   };
 
   const googleSuccess = async (res) => {
@@ -56,27 +45,17 @@ const Auth = () => {
     const token = res?.tokenId;
 
     try {
-      dispatch({ type:AUTH, data: { token, result } });
-      history.push("/");
+      dispatch({ type: AUTH, data: { result, token } });
+
+      history.push('/');
     } catch (error) {
       console.log(error);
     }
   };
-  const googleFailure = (error) => {
-    console.log("Could not log in with Google", error);
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if(isSignUp){
-      console.log('signup button pressed');
-      dispatch(signup(formData,history))
-    }
-    else{
-      dispatch(signin(formData,history))
-    }
-  };
+  const googleError = () => console.log('Google Sign In was unsuccessful. Try again later');
 
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
   useEffect(() => {
     function start() {
       gapi.client.init({
@@ -87,93 +66,43 @@ const Auth = () => {
     }
     gapi.load("client:auth2", start);
   }, []);
-
-
   return (
     <Container component="main" maxWidth="xs">
-      <Paper className={classes.paper} elevation={3}>
+      <Paper className={classes.paper} elevation={6}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography variant="h5">{isSignUp ? "SignUp" : "Sign In"}</Typography>
+        <Typography component="h1" variant="h5">{ isSignup ? 'Sign up' : 'Sign in' }</Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            {isSignUp && (
-              <>
-                <Input
-                  name="firstName"
-                  label="First Name"
-                  handleChange={handleChange}
-                  autoFocus
-                  half
-                />
-                <Input
-                  name="lastName"
-                  label="Last Name"
-                  handleChange={handleChange}
-                  half
-                />
-              </>
+            { isSignup && (
+            <>
+              <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
+              <Input name="lastName" label="Last Name" handleChange={handleChange} half />
+            </>
             )}
-            <Input
-              name="email"
-              label="Email Address"
-              handleChange={handleChange}
-              type="email"
-            />
-            <Input
-              name="password"
-              label="Password"
-              handleChange={handleChange}
-              type={showPassword ? "text" : "password"}
-              handleShowPassword={handleShowPassword}
-            />
-            {isSignUp && (
-              <Input
-                name="confirmPassword"
-                label="Confirm Password"
-                handleChange={handleChange}
-                type="password"
-                handleShowPassword={handleShowPassword}
-              />
-            )}
+            <Input name="email" label="Email Address" handleChange={handleChange} type="email" />
+            <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
+            { isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> }
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            {isSignUp ? "Sign Up" : "Sign In"}
+          <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+            { isSignup ? 'Sign Up' : 'Sign In' }
           </Button>
           <GoogleLogin
             clientId="505131631208-cnle3vl1pg1qc328jhib6h2rv3l3ts1b.apps.googleusercontent.com"
             render={(renderProps) => (
-              <Button
-                className={classes.googleButton}
-                color="primary"
-                fullWidth
-                onClick={renderProps.onClick}
-                disabled={renderProps.disabled}
-                startIcon={<Icon />}
-                variant="contained"
-              >
-                {" "}
+              <Button className={classes.googleButton} color="primary" fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled} startIcon={<Icon />} variant="contained">
                 Google Sign In
               </Button>
             )}
             onSuccess={googleSuccess}
-            onFailure={googleFailure}
-            cookiePolicy={"single_host_origin"}
+            onFailure={googleError}
+            cookiePolicy="single_host_origin"
           />
-
-          <Grid container justifyContent="flex-end">
+          <Grid container justify="flex-end">
             <Grid item>
               <Button onClick={switchMode}>
-                {isSignUp
-                  ? "Already have an account ? Sign In"
-                  : "Dont have an account : SignUp"}
+                { isSignup ? 'Already have an account? Sign in' : "Don't have an account? Sign Up" }
               </Button>
             </Grid>
           </Grid>
@@ -183,4 +112,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default SignUp;

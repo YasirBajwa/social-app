@@ -1,10 +1,7 @@
 import React from "react";
-
-// Redux
 import { useDispatch } from "react-redux";
 import { deletePost, likePost } from "../../../actions/posts";
 
-// Material-UI
 import {
   Card,
   CardActions,
@@ -15,29 +12,23 @@ import {
   ButtonBase,
 } from "@material-ui/core";
 
-// React Router DOM
 import { useHistory } from "react-router-dom";
 
-// Moment
 import moment from "moment";
 
-// Icon
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import DeleteIcon from "@material-ui/icons/Delete";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import ThumbUpAltOutlined from "@material-ui/icons/ThumbUpAltOutlined";
 
-// Styles
 import useStyles from "./styles";
 
 export default function Post({ post, setCurrentId }) {
   const classes = useStyles();
 
-  // Redux
   const dispatch = useDispatch();
 
   const history = useHistory();
-  // User
   const user = JSON.parse(localStorage.getItem("profile"));
 
   // Likes Sub Component
@@ -69,14 +60,12 @@ export default function Post({ post, setCurrentId }) {
     );
   };
 
-  // Handlers
   const openPost = () => history.push(`/posts/${post._id}`);
 
   const editHandler = () => {
     setCurrentId(post._id);
   };
 
-  // Return
   return (
     <Card className={classes.card} raised elevation={6}>
       <CardMedia

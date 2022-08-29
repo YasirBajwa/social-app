@@ -30,9 +30,11 @@ const Form = ({ currentId, setCurrentId }) => {
     e.preventDefault();
 
     if (currentId === 0) {
-      dispatch(createPost({ ...postData, name: user?.result?.name }, history));
+       dispatch(createPost({ ...postData, name: user?.result?.name }, history));
       clear();
+      // console.log('createpost',currentId)
     } else {
+      // console.log('Updatepost',currentId)
       dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }));
       clear();
     }
@@ -74,7 +76,7 @@ const Form = ({ currentId, setCurrentId }) => {
           />
         </div>
         <div className={classes.fileInput}><FileBase type="file" multiple={false} onDone={({ base64 }) => setPostData({ ...postData, selectedFile: base64 })} /></div>
-        <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
+        <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>{currentId === 0 ? "Create Post": 'Update Post'}</Button>
         <Button variant="contained" color="secondary" size="small" onClick={clear} fullWidth>Clear</Button>
       </form>
     </Paper>

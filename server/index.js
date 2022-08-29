@@ -18,7 +18,7 @@ app.use("/user", userRouter);
 
 
 app.get('/',(req,res) =>{
-  res.send('APP is running')
+  res.send('App is running')
 })
 
 
